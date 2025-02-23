@@ -213,18 +213,30 @@ class Game {
     drawHealth() {
         const heartImage = new Image();
         heartImage.src = '/static/assets/heart.svg';
-        const heartSize = 20;
-        const spacing = 25;
+
+        // Calculate heart size based on screen size
+        const baseHeartSize = 20;
+        const heartSize = Math.max(baseHeartSize, Math.min(30, this.canvas.width / 25));
+        const spacing = heartSize * 1.25;
+        const yOffset = Math.max(10, this.canvas.height / 30);
 
         if (heartImage.complete) {
-            // Player health
+            // Player health - positioned from left
             for (let i = 0; i < this.player.health; i++) {
-                this.ctx.drawImage(heartImage, 10 + i * spacing, 10, heartSize, heartSize);
+                this.ctx.drawImage(heartImage, 
+                    10 + i * spacing, 
+                    yOffset, 
+                    heartSize, 
+                    heartSize);
             }
 
-            // Warlord health
+            // Warlord health - positioned from right
             for (let i = 0; i < this.warlord.health; i++) {
-                this.ctx.drawImage(heartImage, 800 - (spacing * 11) + i * spacing, 10, heartSize, heartSize);
+                this.ctx.drawImage(heartImage, 
+                    800 - (spacing * (this.warlord.health - i)), 
+                    yOffset, 
+                    heartSize, 
+                    heartSize);
             }
         }
     }
