@@ -15,7 +15,7 @@ class Game {
 
         this.setupEventListeners();
         this.gameLoop();
-        this.updateHighScores(); //Initial high scores load
+        this.updateHighScores();
     }
 
     setupEventListeners() {
@@ -30,7 +30,6 @@ class Game {
             this.keys[e.key] = false;
         });
 
-        // Initialize audio on first user interaction
         window.addEventListener('click', () => {
             audioManager.initialize();
         });
@@ -71,6 +70,22 @@ class Game {
             // Remove arrows that are off screen
             if (arrow.y < 0) {
                 this.player.arrows.splice(i, 1);
+            }
+        }
+
+        // Check bomb collisions with player
+        for (let i = this.warlord.bombs.length - 1; i >= 0; i--) {
+            const bomb = this.warlord.bombs[i];
+            if (bomb.collidesWith(this.player)) {
+                this.player.health--;
+                this.warlord.bombs.splice(i, 1);
+                audioManager.playDamageSound();
+
+                if (this.player.health <= 0) {
+                    alert('Game Over! Score: ' + this.score);
+                    this.saveScore();
+                    this.resetGame();
+                }
             }
         }
 
@@ -133,7 +148,7 @@ class Game {
             playerHealth: this.player.health,
             warlordHealth: this.warlord.health,
             arrowsShot: this.player.arrows.length,
-            hits: Math.floor(this.score / 100) // Each hit gives 100 points
+            hits: Math.floor(this.score / 100)
         };
 
         fetch('/api/scores', {
@@ -154,6 +169,7 @@ class Game {
         this.player.x = 380;
         this.warlord.x = 360;
         this.player.arrows = [];
+        this.warlord.bombs = []; // Added to clear bombs on reset
     }
 
     updateHighScores() {
@@ -178,7 +194,6 @@ class Game {
     }
 }
 
-// Start the game when the page loads
 window.onload = () => {
     new Game();
 };

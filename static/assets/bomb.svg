@@ -1,0 +1,26 @@
+<svg width="20" height="30" viewBox="0 0 20 30" xmlns="http://www.w3.org/2000/svg">
+    <!-- Bomb body -->
+    <circle cx="10" cy="20" r="8" fill="#4B0082"/>
+    
+    <!-- Fuse -->
+    <path d="M10 12 C10 8 12 6 14 4" stroke="#8B4513" stroke-width="2" fill="none">
+        <animate attributeName="d" 
+                 dur="0.5s"
+                 repeatCount="indefinite"
+                 values="M10 12 C10 8 12 6 14 4;
+                         M10 12 C10 8 14 6 12 4;
+                         M10 12 C10 8 12 6 14 4"/>
+    </path>
+    
+    <!-- Spark animation -->
+    <circle cx="14" cy="4" r="2" fill="#FFD700">
+        <animate attributeName="r"
+                 values="2;1;2"
+                 dur="0.5s"
+                 repeatCount="indefinite"/>
+        <animate attributeName="fill"
+                 values="#FFD700;#FF4500;#FFD700"
+                 dur="0.5s"
+                 repeatCount="indefinite"/>
+    </circle>
+</svg>

@@ -37,7 +37,6 @@ class Player extends Sprite {
     }
 
     draw(ctx) {
-        // Draw the player SVG
         if (this.sprite.complete) {
             ctx.drawImage(this.sprite, this.x, this.y, this.width, this.height);
         }
@@ -58,6 +57,9 @@ class Warlord extends Sprite {
         this.direction = 1;
         this.sprite = new Image();
         this.sprite.src = '/static/assets/warlord.svg';
+        this.bombs = [];
+        this.lastBombTime = 0;
+        this.bombInterval = 2000; // Drop bomb every 2 seconds
     }
 
     update() {
@@ -66,10 +68,20 @@ class Warlord extends Sprite {
             this.direction *= -1;
         }
         this.y += Math.sin(Date.now() / 500) * 2;
+
+        // Update bombs
+        this.bombs.forEach(bomb => bomb.update());
+        this.bombs = this.bombs.filter(bomb => bomb.y < 600);
+
+        // Drop new bomb
+        const currentTime = Date.now();
+        if (currentTime - this.lastBombTime > this.bombInterval) {
+            this.dropBomb();
+            this.lastBombTime = currentTime;
+        }
     }
 
     draw(ctx) {
-        // Draw the warlord SVG with direction-based flipping
         if (this.sprite.complete) {
             ctx.save();
             if (this.direction < 0) {
@@ -80,12 +92,19 @@ class Warlord extends Sprite {
             }
             ctx.restore();
         }
+        // Draw bombs
+        this.bombs.forEach(bomb => bomb.draw(ctx));
+    }
+
+    dropBomb() {
+        const bomb = new Bomb(this.x + this.width / 2, this.y + this.height);
+        this.bombs.push(bomb);
     }
 }
 
 class Arrow extends Sprite {
     constructor(x, y) {
-        super(x, y, 4, 20); // Vertical dimensions
+        super(x, y, 4, 20);
         this.velocityY = -10;
         this.sprite = new Image();
         this.sprite.src = '/static/assets/arrow.svg';
@@ -94,9 +113,26 @@ class Arrow extends Sprite {
     draw(ctx) {
         if (this.sprite.complete) {
             ctx.save();
-            // No additional rotation needed as arrow SVG is already vertical
             ctx.drawImage(this.sprite, this.x, this.y, this.width, this.height);
             ctx.restore();
         }
+    }
+}
+
+class Bomb extends Sprite {
+    constructor(x, y) {
+        super(x, y, 20, 30);
+        this.velocityY = 5;
+        this.sprite = new Image();
+        this.sprite.src = '/static/assets/bomb.svg';
+    }
+
+    draw(ctx) {
+        if (this.sprite.complete) {
+            ctx.drawImage(this.sprite, this.x, this.y, this.width, this.height);
+        }
+    }
+    update() {
+        this.y += this.velocityY;
     }
 }
