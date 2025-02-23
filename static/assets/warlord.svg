@@ -14,10 +14,10 @@
              L20 40 Z" 
           fill="url(#wingGradient)" stroke="#4B0082" stroke-width="1">
         <animate attributeName="d" 
-                 dur="2s" 
+                 dur="0.8s" 
                  repeatCount="indefinite"
                  values="M0 30 C10 20 15 10 20 5 L25 20 L30 10 L35 25 L20 40 Z;
-                         M0 30 C10 25 15 15 20 10 L25 25 L30 15 L35 30 L20 45 Z;
+                         M0 35 C15 30 20 20 25 15 L30 25 L35 15 L40 30 L25 45 Z;
                          M0 30 C10 20 15 10 20 5 L25 20 L30 10 L35 25 L20 40 Z"/>
     </path>
 
@@ -28,10 +28,10 @@
              L60 40 Z" 
           fill="url(#wingGradient)" stroke="#4B0082" stroke-width="1">
         <animate attributeName="d" 
-                 dur="2s" 
+                 dur="0.8s" 
                  repeatCount="indefinite"
                  values="M80 30 C70 20 65 10 60 5 L55 20 L50 10 L45 25 L60 40 Z;
-                         M80 30 C70 25 65 15 60 10 L55 25 L50 15 L45 30 L60 45 Z;
+                         M80 35 C65 30 60 20 55 15 L50 25 L45 15 L40 30 L55 45 Z;
                          M80 30 C70 20 65 10 60 5 L55 20 L50 10 L45 25 L60 40 Z"/>
     </path>
 
@@ -57,13 +57,13 @@
     <g id="legs">
         <path d="M35 50 L33 58" stroke="#4B0082" stroke-width="3">
             <animate attributeName="d" 
-                     dur="1s" 
+                     dur="0.5s" 
                      repeatCount="indefinite"
                      values="M35 50 L33 58;M35 50 L37 58;M35 50 L33 58"/>
         </path>
         <path d="M45 50 L47 58" stroke="#4B0082" stroke-width="3">
             <animate attributeName="d" 
-                     dur="1s" 
+                     dur="0.5s" 
                      repeatCount="indefinite"
                      values="M45 50 L47 58;M45 50 L43 58;M45 50 L47 58"/>
         </path>
