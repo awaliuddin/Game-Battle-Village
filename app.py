@@ -2,6 +2,10 @@ import os
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import DeclarativeBase
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 class Base(DeclarativeBase):
     pass
@@ -9,8 +13,13 @@ class Base(DeclarativeBase):
 db = SQLAlchemy(model_class=Base)
 app = Flask(__name__)
 
+# Configure Supabase database
+SUPABASE_DB_URL = os.environ.get("SUPABASE_DB_URL")
+if not SUPABASE_DB_URL:
+    raise ValueError("SUPABASE_DB_URL environment variable is not set")
+
 # Configure database
-app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URL")
+app.config["SQLALCHEMY_DATABASE_URI"] = SUPABASE_DB_URL
 app.config["SQLALCHEMY_ENGINE_OPTIONS"] = {
     "pool_recycle": 300,
     "pool_pre_ping": True,
