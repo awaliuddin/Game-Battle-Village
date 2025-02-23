@@ -1,8 +1,9 @@
 <svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
     <!-- Sky background -->
     <rect width="800" height="600" fill="#87CEEB"/>
-    <!-- Ground -->
-    <rect y="550" width="800" height="50" fill="#90EE90"/>
+    <!-- Ground layers for depth -->
+    <rect y="480" width="800" height="120" fill="#4a8505"/> <!-- Darker grass -->
+    <rect y="480" width="800" height="20" fill="#90EE90"/> <!-- Lighter grass top edge -->
 
     <!-- Houses with triangular waffle pattern roofs and stone fronts -->
     <g>
@@ -14,6 +15,11 @@
             </pattern>
             <!-- Wall -->
             <rect x="0" y="30" width="140" height="60" fill="url(#stonePattern)" stroke="#696969"/>
+            <!-- Windows and Door -->
+            <rect x="20" y="45" width="25" height="30" fill="#4B0082" stroke="#A0522D"/> <!-- Left window -->
+            <rect x="95" y="45" width="25" height="30" fill="#4B0082" stroke="#A0522D"/> <!-- Right window -->
+            <rect x="55" y="40" width="30" height="50" fill="#8B4513" stroke="#A0522D"/> <!-- Door -->
+            <circle cx="80" cy="65" r="2" fill="#FFD700"/> <!-- Door handle -->
             <!-- Triangular roof base -->
             <path d="M0 30 L70 0 L140 30 Z" fill="#8B4513"/>
             <!-- Waffle pattern on roof -->
@@ -60,6 +66,11 @@
         <!-- House 2 -->
         <g transform="translate(240,420)">
             <rect x="0" y="30" width="140" height="60" fill="url(#stonePattern)" stroke="#696969"/>
+            <!-- Windows and Door -->
+            <rect x="20" y="45" width="25" height="30" fill="#4B0082" stroke="#A0522D"/> <!-- Left window -->
+            <rect x="95" y="45" width="25" height="30" fill="#4B0082" stroke="#A0522D"/> <!-- Right window -->
+            <rect x="55" y="40" width="30" height="50" fill="#8B4513" stroke="#A0522D"/> <!-- Door -->
+            <circle cx="80" cy="65" r="2" fill="#FFD700"/> <!-- Door handle -->
             <!-- Triangular roof base -->
             <path d="M0 30 L70 0 L140 30 Z" fill="#8B4513"/>
             <!-- Waffle pattern on roof -->
@@ -79,6 +90,11 @@
         <!-- House 3 -->
         <g transform="translate(390,420)">
             <rect x="0" y="30" width="140" height="60" fill="url(#stonePattern)" stroke="#696969"/>
+            <!-- Windows and Door -->
+            <rect x="20" y="45" width="25" height="30" fill="#4B0082" stroke="#A0522D"/> <!-- Left window -->
+            <rect x="95" y="45" width="25" height="30" fill="#4B0082" stroke="#A0522D"/> <!-- Right window -->
+            <rect x="55" y="40" width="30" height="50" fill="#8B4513" stroke="#A0522D"/> <!-- Door -->
+            <circle cx="80" cy="65" r="2" fill="#FFD700"/> <!-- Door handle -->
             <!-- Triangular roof base -->
             <path d="M0 30 L70 0 L140 30 Z" fill="#8B4513"/>
             <!-- Waffle pattern on roof -->
