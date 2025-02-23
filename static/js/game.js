@@ -16,9 +16,10 @@ class Game {
 
     setupSplashScreen() {
         const playButton = document.getElementById('play-button');
-        playButton.addEventListener('click', () => {
-            document.getElementById('splash-screen').classList.add('hidden');
-            this.startGame();
+        playButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Instead of starting game directly, show login modal
+            document.getElementById('login-modal').classList.add('visible');
         });
     }
 
@@ -48,6 +49,13 @@ class Game {
     }
 
     startGame() {
+        // Only start if user is authenticated
+        if (!window.authManager.getCurrentUser()) {
+            document.getElementById('login-modal').classList.add('visible');
+            return;
+        }
+
+        document.getElementById('splash-screen').classList.add('hidden');
         this.isGameStarted = true;
         this.gameLoop();
 
@@ -330,5 +338,5 @@ class Game {
 }
 
 window.onload = () => {
-    new Game();
+    window.game = new Game();
 };
