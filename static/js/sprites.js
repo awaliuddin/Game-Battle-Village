@@ -32,27 +32,14 @@ class Player extends Sprite {
         this.health = 5;
         this.speed = 5;
         this.arrows = [];
+        this.sprite = new Image();
+        this.sprite.src = '/static/assets/player.svg';
     }
 
     draw(ctx) {
-        // Draw anime-style player
-        ctx.fillStyle = '#FFB6C1';
-        ctx.fillRect(this.x, this.y, this.width, this.height);
-        
-        // Draw face
-        ctx.fillStyle = 'black';
-        ctx.beginPath();
-        ctx.arc(this.x + 15, this.y + 20, 3, 0, Math.PI * 2);
-        ctx.arc(this.x + 25, this.y + 20, 3, 0, Math.PI * 2);
-        ctx.fill();
-        
-        // Draw hair
-        ctx.strokeStyle = '#8B4513';
-        ctx.lineWidth = 2;
-        for (let i = 0; i < 5; i++) {
-            ctx.beginPath();
-            ctx.arc(this.x + 20, this.y + 10, 10 + i * 2, 0, Math.PI * 2);
-            ctx.stroke();
+        // Draw the player SVG
+        if (this.sprite.complete) {
+            ctx.drawImage(this.sprite, this.x, this.y, this.width, this.height);
         }
     }
 
@@ -69,6 +56,8 @@ class Warlord extends Sprite {
         this.health = 10;
         this.speed = 3;
         this.direction = 1;
+        this.sprite = new Image();
+        this.sprite.src = '/static/assets/warlord.svg';
     }
 
     update() {
@@ -80,23 +69,17 @@ class Warlord extends Sprite {
     }
 
     draw(ctx) {
-        // Draw warlord body
-        ctx.fillStyle = '#4B0082';
-        ctx.fillRect(this.x, this.y, this.width, this.height);
-        
-        // Draw wings
-        ctx.fillStyle = '#800080';
-        ctx.beginPath();
-        ctx.moveTo(this.x - 20, this.y + 30);
-        ctx.lineTo(this.x + 20, this.y + 20);
-        ctx.lineTo(this.x + 20, this.y + 40);
-        ctx.fill();
-        
-        ctx.beginPath();
-        ctx.moveTo(this.x + this.width + 20, this.y + 30);
-        ctx.lineTo(this.x + this.width - 20, this.y + 20);
-        ctx.lineTo(this.x + this.width - 20, this.y + 40);
-        ctx.fill();
+        // Draw the warlord SVG with direction-based flipping
+        if (this.sprite.complete) {
+            ctx.save();
+            if (this.direction < 0) {
+                ctx.scale(-1, 1);
+                ctx.drawImage(this.sprite, -this.x - this.width, this.y, this.width, this.height);
+            } else {
+                ctx.drawImage(this.sprite, this.x, this.y, this.width, this.height);
+            }
+            ctx.restore();
+        }
     }
 }
 
@@ -104,10 +87,19 @@ class Arrow extends Sprite {
     constructor(x, y) {
         super(x, y, 4, 20);
         this.velocityY = -10;
+        this.sprite = new Image();
+        this.sprite.src = '/static/assets/arrow.svg';
     }
 
     draw(ctx) {
-        ctx.fillStyle = '#FFD700';
-        ctx.fillRect(this.x, this.y, this.width, this.height);
+        if (this.sprite.complete) {
+            ctx.save();
+            // Calculate rotation based on velocity
+            const angle = Math.atan2(this.velocityY, this.velocityX);
+            ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
+            ctx.rotate(angle);
+            ctx.drawImage(this.sprite, -this.width / 2, -this.height / 2, this.width, this.height);
+            ctx.restore();
+        }
     }
 }

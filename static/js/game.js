@@ -4,12 +4,15 @@ class Game {
         this.ctx = this.canvas.getContext('2d');
         this.canvas.width = 800;
         this.canvas.height = 600;
-        
+
         this.player = new Player(380, 500);
         this.warlord = new Warlord(360, 100);
         this.score = 0;
-        
+
         this.keys = {};
+        this.villageBackground = new Image();
+        this.villageBackground.src = '/static/assets/village.svg';
+
         this.setupEventListeners();
         this.gameLoop();
         this.updateHighScores(); //Initial high scores load
@@ -59,6 +62,7 @@ class Game {
 
                 if (this.warlord.health <= 0) {
                     alert('Victory! Final Score: ' + this.score);
+                    this.saveScore();
                     this.resetGame();
                 }
                 continue;
@@ -74,9 +78,10 @@ class Game {
         if (this.warlord.collidesWith(this.player)) {
             this.player.health--;
             audioManager.playDamageSound();
-            
+
             if (this.player.health <= 0) {
                 alert('Game Over! Score: ' + this.score);
+                this.saveScore();
                 this.resetGame();
             }
         }
@@ -87,7 +92,9 @@ class Game {
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
         // Draw village background
-        this.drawVillage();
+        if (this.villageBackground.complete) {
+            this.ctx.drawImage(this.villageBackground, 0, 0, this.canvas.width, this.canvas.height);
+        }
 
         // Draw game objects
         this.player.draw(this.ctx);
@@ -96,67 +103,31 @@ class Game {
 
         // Draw health
         this.drawHealth();
-        
+
         // Draw score
         document.getElementById('score').textContent = `Score: ${this.score}`;
     }
 
-    drawVillage() {
-        // Draw sky
-        this.ctx.fillStyle = '#87CEEB';
-        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
-        // Draw ground
-        this.ctx.fillStyle = '#90EE90';
-        this.ctx.fillRect(0, 550, this.canvas.width, 50);
-
-        // Draw houses
-        for (let i = 0; i < 5; i++) {
-            this.drawHouse(100 + i * 150, 450);
-        }
-    }
-
-    drawHouse(x, y) {
-        this.ctx.fillStyle = '#CD853F';
-        this.ctx.fillRect(x, y, 60, 60);
-        
-        // Roof
-        this.ctx.fillStyle = '#8B4513';
-        this.ctx.beginPath();
-        this.ctx.moveTo(x - 10, y);
-        this.ctx.lineTo(x + 30, y - 30);
-        this.ctx.lineTo(x + 70, y);
-        this.ctx.fill();
-    }
-
     drawHealth() {
+        const heartImage = new Image();
+        heartImage.src = '/static/assets/heart.svg';
         const heartSize = 20;
         const spacing = 25;
 
-        // Player health
-        for (let i = 0; i < this.player.health; i++) {
-            this.drawHeart(10 + i * spacing, 10, heartSize, '#FF0000');
-        }
+        if (heartImage.complete) {
+            // Player health
+            for (let i = 0; i < this.player.health; i++) {
+                this.ctx.drawImage(heartImage, 10 + i * spacing, 10, heartSize, heartSize);
+            }
 
-        // Warlord health
-        for (let i = 0; i < this.warlord.health; i++) {
-            this.drawHeart(this.canvas.width - (spacing * 11) + i * spacing, 10, heartSize, '#800080');
+            // Warlord health
+            for (let i = 0; i < this.warlord.health; i++) {
+                this.ctx.drawImage(heartImage, this.canvas.width - (spacing * 11) + i * spacing, 10, heartSize, heartSize);
+            }
         }
     }
 
-    drawHeart(x, y, size, color) {
-        this.ctx.fillStyle = color;
-        this.ctx.beginPath();
-        this.ctx.moveTo(x + size/2, y + size/4);
-        this.ctx.bezierCurveTo(x + size/2, y, x, y, x, y + size/4);
-        this.ctx.bezierCurveTo(x, y + size/2, x + size/2, y + size, x + size/2, y + size);
-        this.ctx.bezierCurveTo(x + size/2, y + size, x + size, y + size/2, x + size, y + size/4);
-        this.ctx.bezierCurveTo(x + size, y, x + size/2, y, x + size/2, y + size/4);
-        this.ctx.fill();
-    }
-
-    resetGame() {
-        // Save game stats before reset
+    saveScore() {
         const gameStats = {
             score: this.score,
             playerHealth: this.player.health,
@@ -165,7 +136,6 @@ class Game {
             hits: Math.floor(this.score / 100) // Each hit gives 100 points
         };
 
-        // Send score to server
         fetch('/api/scores', {
             method: 'POST',
             headers: {
@@ -175,8 +145,9 @@ class Game {
         })
         .then(() => this.updateHighScores())
         .catch(err => console.error('Error saving score:', err));
+    }
 
-        // Reset game state
+    resetGame() {
         this.player.health = 5;
         this.warlord.health = 10;
         this.score = 0;
