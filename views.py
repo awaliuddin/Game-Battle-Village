@@ -1,10 +1,10 @@
-from flask import jsonify, request
+from flask import jsonify, request, render_template
 from app import app, db
 from models import GameScore
 
 @app.route('/')
 def index():
-    return app.send_static_file('index.html')
+    return render_template('index.html')
 
 @app.route('/api/scores', methods=['POST'])
 def save_score():
