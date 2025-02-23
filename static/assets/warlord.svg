@@ -1,5 +1,37 @@
 <svg width="80" height="60" viewBox="0 0 80 60" xmlns="http://www.w3.org/2000/svg">
-    <path d="M0 30 L20 20 L20 40 Z" fill="#800080"/>
+    <!-- Dynamic wings -->
+    <path d="M0 30 
+             C10 20 15 10 20 5 
+             L25 20 L30 10 L35 25 
+             L20 40 Z" 
+          fill="#800080" stroke="#4B0082" stroke-width="1">
+        <animate attributeName="d" 
+                 dur="2s" 
+                 repeatCount="indefinite"
+                 values="M0 30 C10 20 15 10 20 5 L25 20 L30 10 L35 25 L20 40 Z;
+                         M0 30 C10 25 15 15 20 10 L25 25 L30 15 L35 30 L20 45 Z;
+                         M0 30 C10 20 15 10 20 5 L25 20 L30 10 L35 25 L20 40 Z"/>
+    </path>
+
+    <!-- Mirror for right wing -->
+    <path d="M80 30 
+             C70 20 65 10 60 5 
+             L55 20 L50 10 L45 25 
+             L60 40 Z" 
+          fill="#800080" stroke="#4B0082" stroke-width="1">
+        <animate attributeName="d" 
+                 dur="2s" 
+                 repeatCount="indefinite"
+                 values="M80 30 C70 20 65 10 60 5 L55 20 L50 10 L45 25 L60 40 Z;
+                         M80 30 C70 25 65 15 60 10 L55 25 L50 15 L45 30 L60 45 Z;
+                         M80 30 C70 20 65 10 60 5 L55 20 L50 10 L45 25 L60 40 Z"/>
+    </path>
+
+    <!-- Body -->
     <rect x="20" y="0" width="40" height="60" fill="#4B0082"/>
-    <path d="M60 30 L80 20 L80 40 Z" fill="#800080"/>
+
+    <!-- Armor details -->
+    <path d="M25 10 L55 10 L50 20 L30 20 Z" fill="#6A5ACD"/>
+    <path d="M30 25 L50 25 L45 35 L35 35 Z" fill="#6A5ACD"/>
+    <path d="M35 40 L45 40 L42 50 L38 50 Z" fill="#6A5ACD"/>
 </svg>
