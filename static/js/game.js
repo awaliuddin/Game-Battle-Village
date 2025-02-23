@@ -12,6 +12,7 @@ class Game {
         this.keys = {};
         this.setupEventListeners();
         this.gameLoop();
+        this.updateHighScores(); //Initial high scores load
     }
 
     setupEventListeners() {
@@ -171,7 +172,9 @@ class Game {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify(gameStats)
-        }).catch(err => console.error('Error saving score:', err));
+        })
+        .then(() => this.updateHighScores())
+        .catch(err => console.error('Error saving score:', err));
 
         // Reset game state
         this.player.health = 5;
@@ -180,6 +183,21 @@ class Game {
         this.player.x = 380;
         this.warlord.x = 360;
         this.player.arrows = [];
+    }
+
+    updateHighScores() {
+        fetch('/api/scores')
+            .then(response => response.json())
+            .then(scores => {
+                const scoresList = document.getElementById('scores-list');
+                scoresList.innerHTML = scores.map(score => `
+                    <div class="score-entry">
+                        <span>${score.score} points</span>
+                        <small> (${new Date(score.created_at).toLocaleDateString()})</small>
+                    </div>
+                `).join('');
+            })
+            .catch(err => console.error('Error fetching scores:', err));
     }
 
     gameLoop() {
