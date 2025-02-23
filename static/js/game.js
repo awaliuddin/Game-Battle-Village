@@ -24,7 +24,6 @@ class Game {
     }
 
     setupCanvas() {
-        // Make canvas responsive
         const resizeCanvas = () => {
             const container = document.getElementById('game-container');
             const containerWidth = container.clientWidth;
@@ -43,9 +42,11 @@ class Game {
             this.canvas.width = width;
             this.canvas.height = height;
 
-            // Scale the context to maintain 800x600 coordinate system
-            this.scale = width / 800;
-            this.ctx.scale(this.scale, this.scale);
+            // Store the scale for use in rendering
+            this.scale = {
+                x: width / 800,
+                y: height / 600
+            };
         };
 
         window.addEventListener('resize', resizeCanvas);
@@ -183,12 +184,16 @@ class Game {
     }
 
     draw() {
-        // Clear canvas
+        // Clear canvas and set proper scaling
+        this.ctx.save();
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
-        // Draw village background
+        // Scale everything to match canvas size
+        this.ctx.scale(this.scale.x, this.scale.y);
+
+        // Draw village background contained within game area
         if (this.villageBackground.complete) {
-            this.ctx.drawImage(this.villageBackground, 0, 0, this.canvas.width, this.canvas.height);
+            this.ctx.drawImage(this.villageBackground, 0, 0, 800, 600);
         }
 
         // Draw game objects
@@ -199,8 +204,10 @@ class Game {
         // Draw health
         this.drawHealth();
 
-        // Draw score
+        // Update score display
         document.getElementById('score').textContent = `Score: ${this.score}`;
+
+        this.ctx.restore();
     }
 
     drawHealth() {
