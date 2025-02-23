@@ -2,14 +2,19 @@ class Game {
     constructor() {
         this.canvas = document.getElementById('gameCanvas');
         this.ctx = this.canvas.getContext('2d');
-        this.canvas.width = 800;
-        this.canvas.height = 600;
+        this.setupCanvas();
 
         this.player = new Player(380, 500);
         this.warlord = new Warlord(360, 100);
         this.score = 0;
 
         this.keys = {};
+        this.isTouchDevice = 'ontouchstart' in window;
+        this.touchControls = {
+            leftPressed: false,
+            rightPressed: false
+        };
+
         this.villageBackground = new Image();
         this.villageBackground.src = '/static/assets/village.svg';
 
@@ -18,7 +23,37 @@ class Game {
         this.updateHighScores();
     }
 
+    setupCanvas() {
+        // Make canvas responsive
+        const resizeCanvas = () => {
+            const container = document.getElementById('game-container');
+            const containerWidth = container.clientWidth;
+            const containerHeight = container.clientHeight;
+
+            // Set canvas size to match container while maintaining aspect ratio
+            const aspectRatio = 800 / 600;
+            let width = containerWidth;
+            let height = containerWidth / aspectRatio;
+
+            if (height > containerHeight) {
+                height = containerHeight;
+                width = containerHeight * aspectRatio;
+            }
+
+            this.canvas.width = width;
+            this.canvas.height = height;
+
+            // Scale the context to maintain 800x600 coordinate system
+            this.scale = width / 800;
+            this.ctx.scale(this.scale, this.scale);
+        };
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+    }
+
     setupEventListeners() {
+        // Keyboard controls
         window.addEventListener('keydown', (e) => {
             this.keys[e.key] = true;
             if (e.key === ' ') {
@@ -30,17 +65,62 @@ class Game {
             this.keys[e.key] = false;
         });
 
+        // Touch controls
+        if (this.isTouchDevice) {
+            this.setupTouchControls();
+        }
+
         window.addEventListener('click', () => {
             audioManager.initialize();
         });
     }
 
+    setupTouchControls() {
+        const touchControls = document.createElement('div');
+        touchControls.id = 'touch-controls';
+        touchControls.innerHTML = `
+            <div class="move-controls">
+                <div class="control-button" id="moveLeft">←</div>
+                <div class="control-button" id="moveRight">→</div>
+            </div>
+            <div class="control-button" id="shoot">🏹</div>
+        `;
+        document.getElementById('game-container').appendChild(touchControls);
+
+        // Move left
+        const leftBtn = document.getElementById('moveLeft');
+        leftBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            this.touchControls.leftPressed = true;
+        });
+        leftBtn.addEventListener('touchend', () => {
+            this.touchControls.leftPressed = false;
+        });
+
+        // Move right
+        const rightBtn = document.getElementById('moveRight');
+        rightBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            this.touchControls.rightPressed = true;
+        });
+        rightBtn.addEventListener('touchend', () => {
+            this.touchControls.rightPressed = false;
+        });
+
+        // Shoot
+        const shootBtn = document.getElementById('shoot');
+        shootBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            this.player.shoot();
+        });
+    }
+
     update() {
-        // Player movement
-        if (this.keys['ArrowLeft'] && this.player.x > 0) {
+        // Player movement from both keyboard and touch
+        if ((this.keys['ArrowLeft'] || this.touchControls.leftPressed) && this.player.x > 0) {
             this.player.x -= this.player.speed;
         }
-        if (this.keys['ArrowRight'] && this.player.x < this.canvas.width - this.player.width) {
+        if ((this.keys['ArrowRight'] || this.touchControls.rightPressed) && this.player.x < 800 - this.player.width) {
             this.player.x += this.player.speed;
         }
 
@@ -137,7 +217,7 @@ class Game {
 
             // Warlord health
             for (let i = 0; i < this.warlord.health; i++) {
-                this.ctx.drawImage(heartImage, this.canvas.width - (spacing * 11) + i * spacing, 10, heartSize, heartSize);
+                this.ctx.drawImage(heartImage, 800 - (spacing * 11) + i * spacing, 10, heartSize, heartSize);
             }
         }
     }
@@ -169,7 +249,7 @@ class Game {
         this.player.x = 380;
         this.warlord.x = 360;
         this.player.arrows = [];
-        this.warlord.bombs = []; // Added to clear bombs on reset
+        this.warlord.bombs = [];
     }
 
     updateHighScores() {
