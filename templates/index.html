@@ -20,11 +20,51 @@
                 </a>
             </div>
         </div>
+
+        <!-- Login Modal -->
+        <div id="login-modal" class="modal">
+            <div class="modal-content">
+                <h2>Login to Play</h2>
+                <form id="login-form" class="auth-form">
+                    <div class="form-group">
+                        <input type="text" id="username" name="username" placeholder="Username" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="password" name="password" placeholder="Password" required>
+                    </div>
+                    <button type="submit" class="auth-button">Login</button>
+                </form>
+                <p class="auth-switch">
+                    New player? <a href="#" id="show-register">Register here</a>
+                </p>
+            </div>
+        </div>
+
+        <!-- Register Modal -->
+        <div id="register-modal" class="modal">
+            <div class="modal-content">
+                <h2>Register New Player</h2>
+                <form id="register-form" class="auth-form">
+                    <div class="form-group">
+                        <input type="text" id="reg-username" name="username" placeholder="Choose Username" required>
+                    </div>
+                    <div class="form-group">
+                        <input type="password" id="reg-password" name="password" placeholder="Choose Password" required>
+                    </div>
+                    <button type="submit" class="auth-button">Register</button>
+                </form>
+                <p class="auth-switch">
+                    Already registered? <a href="#" id="show-login">Login here</a>
+                </p>
+            </div>
+        </div>
+
         <canvas id="gameCanvas"></canvas>
         <div id="ui-overlay">
             <div id="player-health"></div>
             <div id="warlord-health"></div>
             <div id="score">Score: 0</div>
+            <div id="player-info"></div>
         </div>
         <div id="high-scores-toggle" onclick="toggleHighScores()">
             <svg viewBox="0 0 24 24">
@@ -45,43 +85,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
     <script src="{{ url_for('static', filename='js/sprites.js') }}"></script>
     <script src="{{ url_for('static', filename='js/audio.js') }}"></script>
-    <script>
-        function toggleHighScores() {
-            const highScores = document.getElementById('high-scores');
-            highScores.classList.toggle('visible');
-        }
-
-        // Fullscreen handling
-        const fullscreenToggle = document.getElementById('fullscreen-toggle');
-        const gameContainer = document.getElementById('game-container');
-
-        fullscreenToggle.addEventListener('click', () => {
-            if (!document.fullscreenElement) {
-                gameContainer.requestFullscreen()
-                    .then(() => {
-                        gameContainer.classList.add('fullscreen');
-                        screen.orientation.lock('landscape')
-                            .catch(() => {}); // Ignore if not supported
-                    })
-                    .catch(err => console.error(err));
-            } else {
-                document.exitFullscreen()
-                    .then(() => {
-                        gameContainer.classList.remove('fullscreen');
-                        screen.orientation.unlock()
-                            .catch(() => {}); // Ignore if not supported
-                    })
-                    .catch(err => console.error(err));
-            }
-        });
-
-        // Handle fullscreen changes
-        document.addEventListener('fullscreenchange', () => {
-            if (!document.fullscreenElement) {
-                gameContainer.classList.remove('fullscreen');
-            }
-        });
-    </script>
+    <script src="{{ url_for('static', filename='js/auth.js') }}"></script>
     <script src="{{ url_for('static', filename='js/game.js') }}"></script>
 </body>
 </html>
