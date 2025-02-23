@@ -85,7 +85,7 @@ class Warlord extends Sprite {
 
 class Arrow extends Sprite {
     constructor(x, y) {
-        super(x, y, 20, 4); // Update dimensions to match new SVG
+        super(x, y, 4, 20); // Vertical dimensions
         this.velocityY = -10;
         this.sprite = new Image();
         this.sprite.src = '/static/assets/arrow.svg';
@@ -94,11 +94,8 @@ class Arrow extends Sprite {
     draw(ctx) {
         if (this.sprite.complete) {
             ctx.save();
-            // Calculate rotation based on velocity
-            const angle = Math.atan2(this.velocityY, this.velocityX) + Math.PI/2; // Add 90 degrees to make it vertical
-            ctx.translate(this.x + this.width / 2, this.y + this.height / 2);
-            ctx.rotate(angle);
-            ctx.drawImage(this.sprite, -this.height / 2, -this.width / 2, this.width, this.height);
+            // No additional rotation needed as arrow SVG is already vertical
+            ctx.drawImage(this.sprite, this.x, this.y, this.width, this.height);
             ctx.restore();
         }
     }

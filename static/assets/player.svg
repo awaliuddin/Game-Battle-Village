@@ -2,9 +2,9 @@
     <!-- Base character -->
     <defs>
         <linearGradient id="hairGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" style="stop-color:#8B4513"/>
-            <stop offset="50%" style="stop-color:#A0522D"/>
-            <stop offset="100%" style="stop-color:#8B4513"/>
+            <stop offset="0%" style="stop-color:#FFD700"/>
+            <stop offset="50%" style="stop-color:#FFA500"/>
+            <stop offset="100%" style="stop-color:#FFD700"/>
         </linearGradient>
     </defs>
 
@@ -13,9 +13,9 @@
 
     <!-- Face -->
     <path d="M20 10 C25 10 30 15 30 20 C30 25 25 30 20 30 C15 30 10 25 10 20 C10 15 15 10 20 10" 
-          fill="#FFE4E1"/>
+          fill="#FFF5EE"/>
 
-    <!-- Anime-style hair -->
+    <!-- Anime-style blonde hair -->
     <path d="M20 5 
              C30 5 35 15 35 25 
              L33 35 L30 25 L25 35 L20 25 L15 35 L10 25 L7 35 L5 25 
@@ -24,11 +24,14 @@
 
     <!-- Hair highlights -->
     <path d="M15 15 C20 10 25 10 30 15" 
-          stroke="#D2691E" stroke-width="0.5" fill="none"/>
+          stroke="#FFE4B5" stroke-width="0.5" fill="none"/>
 
     <!-- Face details -->
-    <circle cx="15" cy="20" r="2" fill="#4B0082"/> <!-- Left eye -->
-    <circle cx="25" cy="20" r="2" fill="#4B0082"/> <!-- Right eye -->
+    <circle cx="15" cy="20" r="3.5" fill="#4B0082"/> <!-- Left eye -->
+    <circle cx="25" cy="20" r="3.5" fill="#4B0082"/> <!-- Right eye -->
+    <!-- Eye highlights -->
+    <circle cx="16" cy="19" r="1" fill="white"/>
+    <circle cx="26" cy="19" r="1" fill="white"/>
     <path d="M17 25 C18.5 26 21.5 26 23 25" 
           fill="none" stroke="#FF69B4" stroke-width="1"/> <!-- Smile -->
 
