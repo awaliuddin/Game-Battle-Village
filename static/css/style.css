@@ -46,13 +46,19 @@ body {
 .high-scores {
     position: absolute;
     top: 50px;
-    right: 10px;
+    right: -250px; /* Start off-screen */
     background: rgba(0, 0, 0, 0.7);
     padding: 15px;
     border-radius: 10px;
     color: white;
     font-family: 'Arial', sans-serif;
     z-index: 1;
+    width: 200px;
+    transition: right 0.3s ease-in-out;
+}
+
+.high-scores.visible {
+    right: 10px;
 }
 
 .high-scores h2 {
@@ -74,4 +80,31 @@ body {
 
 .score-entry:last-child {
     border-bottom: none;
+}
+
+#high-scores-toggle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 40px;
+    height: 40px;
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    border: 2px solid #FFD700;
+    transition: transform 0.3s ease;
+}
+
+#high-scores-toggle:hover {
+    transform: scale(1.1);
+}
+
+#high-scores-toggle svg {
+    width: 24px;
+    height: 24px;
+    fill: #FFD700;
 }
