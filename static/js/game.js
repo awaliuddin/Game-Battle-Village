@@ -4,6 +4,25 @@ class Game {
         this.ctx = this.canvas.getContext('2d');
         this.setupCanvas();
 
+        // Initialize game state
+        this.isGameStarted = false;
+
+        // Setup splash screen handlers
+        this.setupSplashScreen();
+
+        // Initialize game components (but don't start the game loop yet)
+        this.initializeGameComponents();
+    }
+
+    setupSplashScreen() {
+        const playButton = document.getElementById('play-button');
+        playButton.addEventListener('click', () => {
+            document.getElementById('splash-screen').classList.add('hidden');
+            this.startGame();
+        });
+    }
+
+    initializeGameComponents() {
         this.player = new Player(380, 500);
         this.warlord = new Warlord(360, 100);
         this.score = 0;
@@ -19,8 +38,23 @@ class Game {
         this.villageBackground.src = '/static/assets/village.svg';
 
         this.setupEventListeners();
-        this.gameLoop();
+
+        // Initialize audio but don't start playing yet
+        if (typeof audioManager !== 'undefined') {
+            audioManager.initialize();
+        }
+
         this.updateHighScores();
+    }
+
+    startGame() {
+        this.isGameStarted = true;
+        this.gameLoop();
+
+        // If using touch device, show touch controls
+        if (this.isTouchDevice) {
+            this.setupTouchControls();
+        }
     }
 
     setupCanvas() {
@@ -223,19 +257,19 @@ class Game {
         if (heartImage.complete) {
             // Player health - positioned from left
             for (let i = 0; i < this.player.health; i++) {
-                this.ctx.drawImage(heartImage, 
-                    10 + i * spacing, 
-                    yOffset, 
-                    heartSize, 
+                this.ctx.drawImage(heartImage,
+                    10 + i * spacing,
+                    yOffset,
+                    heartSize,
                     heartSize);
             }
 
             // Warlord health - positioned from right
             for (let i = 0; i < this.warlord.health; i++) {
-                this.ctx.drawImage(heartImage, 
-                    800 - (spacing * (this.warlord.health - i)), 
-                    yOffset, 
-                    heartSize, 
+                this.ctx.drawImage(heartImage,
+                    800 - (spacing * (this.warlord.health - i)),
+                    yOffset,
+                    heartSize,
                     heartSize);
             }
         }
@@ -257,8 +291,8 @@ class Game {
             },
             body: JSON.stringify(gameStats)
         })
-        .then(() => this.updateHighScores())
-        .catch(err => console.error('Error saving score:', err));
+            .then(() => this.updateHighScores())
+            .catch(err => console.error('Error saving score:', err));
     }
 
     resetGame() {
@@ -287,6 +321,8 @@ class Game {
     }
 
     gameLoop() {
+        if (!this.isGameStarted) return;
+
         this.update();
         this.draw();
         requestAnimationFrame(() => this.gameLoop());
