@@ -155,6 +155,25 @@ class Game {
     }
 
     resetGame() {
+        // Save game stats before reset
+        const gameStats = {
+            score: this.score,
+            playerHealth: this.player.health,
+            warlordHealth: this.warlord.health,
+            arrowsShot: this.player.arrows.length,
+            hits: Math.floor(this.score / 100) // Each hit gives 100 points
+        };
+
+        // Send score to server
+        fetch('/api/scores', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(gameStats)
+        }).catch(err => console.error('Error saving score:', err));
+
+        // Reset game state
         this.player.health = 5;
         this.warlord.health = 10;
         this.score = 0;
